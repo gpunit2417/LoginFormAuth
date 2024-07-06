@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 export default function Navbar() {
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    localStorage.removeItem("token"); // Clear the login token
+    setIsLoggedIn(false); // Update the login state 
+    // history.push("/"); // Redirect to homepage after logout
+    window.location.href = "/"
+  };
   return (
     <div>
       <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -26,11 +35,19 @@ export default function Navbar() {
                   Home
                 </a>
               </li>
-              <li className="nav-item">
-                <a className="nav-link active" href="/login">
-                  Login
-                </a>
-              </li>
+              {isLoggedIn ? ( // Render logout button if user is logged in
+                <li className="nav-item" style={{ margin: "0 0 0 10px" }}>
+                  <button className="nav-link" onClick={handleLogout}>
+                    Logout
+                  </button>
+                </li>
+              ) : (
+                <li className="nav-item" style={{ margin: "0 0 0 10px" }}>
+                  <a href="/login" className="nav-link">
+                    Login
+                  </a>
+                </li>
+              )}
               <li className="nav-item">
                 <a className="nav-link active" href="/signup">
                   SignUp
