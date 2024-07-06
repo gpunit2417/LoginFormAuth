@@ -1,11 +1,43 @@
 import React, { useState } from "react";
 import { FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  return (
+  const [error, setError] = useState("");
+  const history = useHistory();
+
+
+  //fetched the data of the user and matches the credentials
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:4000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        // Login successful
+        localStorage.setItem("token", data.token);
+        history.push("/"); // Redirect to dashboard after login
+        window.location.reload();
+      } else {
+        // Login failed
+        setError(data.message);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setError("An unexpected error occurred. Please try again later.");
+      // alert("")
+    }
+  };
+  return ( 
     <div
       className="card"
       style={{
@@ -22,6 +54,7 @@ export default function Login() {
       </div>
       <div className="card" style={{ width: "40%", float: "right", margin: '15px 0 15px 0' }}>
         <h2 style={{ textAlign: "left", margin: "20px 0 20px 30px" }}>Sign In</h2>
+        <form onSubmit={handleSubmit}>
         <div
           style={{
             marginBottom: "20px",
@@ -98,6 +131,7 @@ export default function Login() {
           >
             Sign In
           </button>
+          </form>
           <div style={{width: '80%', margin: '20px 0 20px 55px'}}>
             <h5 style={{backgroundColor: 'lightgray', fontStyle: "italic", borderRadius: '0.3rem', fontWeight: '400'}}>or Connect with the social media</h5>
           </div>
