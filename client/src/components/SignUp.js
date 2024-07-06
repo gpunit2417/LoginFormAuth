@@ -15,37 +15,52 @@ export default function SignUp() {
     return re.test(String(email).toLowerCase());
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newErrors = {};
+    // const newErrors = {};
 
-    if (firstName.length < 3) {
-      newErrors.firstName = "First name must be at least 3 characters";
-    }
+    // if (firstName.length < 3) {
+    //   newErrors.firstName = "First name must be at least 3 characters";
+    // }
 
-    if (lastName.length < 3) {
-      newErrors.lastName = "Last name must be at least 3 characters";
-    }
+    // if (lastName.length < 3) {
+    //   newErrors.lastName = "Last name must be at least 3 characters";
+    // }
 
-    if (!validateEmail(email)) {
-      newErrors.email = "Invalid email address";
-    }
+    // if (!validateEmail(email)) {
+    //   newErrors.email = "Invalid email address";
+    // }
 
-    if (password !== confirmPassword) {
-      newErrors.password = "Passwords do not match";
-    }
+    // if (password !== confirmPassword) {
+    //   newErrors.password = "Passwords do not match";
+    // }
 
-    setErrors(newErrors);
+    // setErrors(newErrors);
 
-    if (Object.keys(newErrors).length === 0) {
+    // if (Object.keys(newErrors).length === 0) {
       // Submit form data
-      alert("Form submitted successfully");
-      setConfirmPassword("");
-      setFirstName("");
-      setLastName("");
-      setPassword("");
-      setEmail("");
-    }
+      try {
+        const response = await fetch('http://localhost:4000/signup', {
+          method: 'POST',
+          body: JSON.stringify({ firstName, lastName, email, password, confirmPassword }),
+          headers: { 'Content-Type': 'application/json' },
+        });
+
+        if (response.status === 200) {
+          alert('Registration successful');
+          setFirstName("");
+          setLastName("");
+          setEmail("");
+          setPassword("");
+          setConfirmPassword("");
+        } else {
+          const errorData = await response.json();
+          alert(`Registration failed: ${errorData.message || 'Unknown error'}`);
+        }
+      } catch (error) {
+        alert('Registration failed: Network error');
+      }
+    // }
   };
 
   return (
