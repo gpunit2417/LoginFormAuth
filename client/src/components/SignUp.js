@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { auth, googleProvider, facebookProvider, signInWithPopup } from "./firebase"; // Import Firebase
 
 export default function SignUp() {
   const [firstName, setFirstName] = useState("");
@@ -9,10 +10,35 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [user, setUser] = useState(null);
 
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
+  };
+
+  // Google Sign In
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      setUser(result.user);
+      alert(`Signed in as ${result.user.displayName}`);
+    } catch (error) {
+      console.error("Google Sign In Error", error);
+      alert("Google Sign In failed");
+    }
+  };
+ 
+  // Facebook Sign In
+  const handleFacebookSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, facebookProvider);
+      setUser(result.user);
+      alert(`Signed in as ${result.user.displayName}`);
+    } catch (error) {
+      console.error("Facebook Sign In Error", error);
+      alert("Facebook Sign In failed");
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -340,6 +366,7 @@ export default function SignUp() {
               padding: "10px 20px",
               backgroundColor: "white",
             }}
+            onClick={handleFacebookSignIn}
           >
             <FaFacebook style={{ margin: "0 4px 3px 0" }} />
             Sign up with Facebook
@@ -351,6 +378,7 @@ export default function SignUp() {
               padding: "10px 20px",
               backgroundColor: "white",
             }}
+            onClick={handleGoogleSignIn}
           >
             <FcGoogle style={{ margin: "0 4px 3px 0" }} />
             Sign up with Google
