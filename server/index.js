@@ -23,6 +23,34 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 db.once("open", () => {
   console.log("Connected to MongoDB");
 });
+const admin = require("firebase-admin");
+const serviceAccount = require("../server/login-form-auth-f93cc-firebase-adminsdk-fbsvc-998cb81bb2.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+
+const auth = admin.auth();
+
+const verifyToken = async (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const decodedToken = await auth.verifyIdToken(token);
+    req.user = decodedToken; // Attach user data to the request
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: "Invalid Token" });
+  }
+};
+
+app.get("/protected-route", verifyToken, (req, res) => {
+  res.json({ message: "You have access!", user: req.user });
+});
 
 // Define a route handler for the default home page
 app.get("/", (req, res) => {
