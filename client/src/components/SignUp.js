@@ -53,9 +53,9 @@ export default function SignUp() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name: user.displayName,
-        email: user.email,
-        profilePic: user.photoURL,
+        name: result.user.displayName,
+        email: result.user.email,
+        profilePic: result.user.photoURL,
       }),
     });
     } catch (error) {
