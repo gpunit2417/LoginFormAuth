@@ -22,7 +22,19 @@ export default function SignUp() {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       setUser(result.user);
+      console.log(result.user);
       alert(`Signed in as ${result.user.displayName}`);
+
+      // Send user data to backend
+    await fetch("http://localhost:4000/auth/google", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: result.user.displayName,
+        email: result.user.email,
+        profilePic: result.user.photoURL,
+      }),
+    });
     } catch (error) {
       console.error("Google Sign In Error", error);
       alert("Google Sign In failed");
@@ -35,6 +47,17 @@ export default function SignUp() {
       const result = await signInWithPopup(auth, facebookProvider);
       setUser(result.user);
       alert(`Signed in as ${result.user.displayName}`);
+
+      // Send user data to backend
+    await fetch("http://localhost:4000/auth/facebook", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: user.displayName,
+        email: user.email,
+        profilePic: user.photoURL,
+      }),
+    });
     } catch (error) {
       console.error("Facebook Sign In Error", error);
       alert("Facebook Sign In failed");
