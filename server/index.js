@@ -106,6 +106,41 @@ app.post("/login", async (req, res) => {
   }
 });
 
+
+// Google Auth Route
+app.post("/auth/google", async (req, res) => {
+  try {
+    const { name, email, profilePic } = req.body;
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = new User({ name, email, profilePic });
+      await user.save();
+    }
+
+    res.status(200).json({ message: "User authenticated successfully", user });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
+// Facebook Auth Route
+app.post("/auth/facebook", async (req, res) => {
+  try {
+    const { name, email, profilePic } = req.body;
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = new User({ name, email, profilePic });
+      await user.save();
+    }
+
+    res.status(200).json({ message: "User authenticated successfully", user });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+});
+
 // Define a fallback error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
