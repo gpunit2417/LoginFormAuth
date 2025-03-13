@@ -6,7 +6,7 @@ const User = require("./models/User");
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken");
 const { isValidObjectId } = require("mongoose");
-
+const GoogleUser = require("./models/Google")
 // Create Express app
 const app = express();
 
@@ -111,10 +111,10 @@ app.post("/login", async (req, res) => {
 app.post("/auth/google", async (req, res) => {
   try {
     const { name, email, profilePic } = req.body;
-    let user = await User.findOne({ email });
+    let user = await GoogleUser.findOne({ email });
 
     if (!user) {
-      user = new User({ name, email, profilePic });
+      user = new GoogleUser({ name, email, profilePic });
       await user.save();
     }
 
