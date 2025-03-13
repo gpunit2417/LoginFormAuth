@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { FaFacebook } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { auth } from "./firebase"; // Import Firebase auth instance
+import { GoogleAuthProvider, signInWithPopup, FacebookAuthProvider } from "firebase/auth";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -9,6 +11,41 @@ export default function Login() {
   const [error, setError] = useState("");
   const history = useHistory();
 
+  // 🔹 Google Sign-In
+  const handleGoogleSignIn = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+
+      if (!result.user) throw new Error("Google login failed");
+
+      console.log("Google Login Success:", result.user);
+      localStorage.setItem("token", await result.user.getIdToken()); // Store token
+      history.push("/");
+      window.location.reload();
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+      setError("Google Sign-In failed. Try again.");
+    }
+  };
+
+  // 🔹 Facebook Sign-In
+  const handleFacebookSignIn = async () => {
+    try {
+      const provider = new FacebookAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+
+      if (!result.user) throw new Error("Facebook login failed");
+
+      console.log("Facebook Login Success:", result.user);
+      localStorage.setItem("token", await result.user.getIdToken()); // Store token
+      history.push("/");
+      window.location.reload();
+    } catch (error) {
+      console.error("Facebook Sign-In Error:", error);
+      setError("Facebook Sign-In failed. Try again.");
+    }
+  };
 
   //fetched the data of the user and matches the credentials
   const handleSubmit = async (e) => {
@@ -143,6 +180,7 @@ export default function Login() {
               padding: "10px 20px",
               backgroundColor: 'white'
             }}
+            onClick={handleFacebookSignIn}
           ><FaFacebook style={{margin: '0 4px 3px 0'}}/>
             Sign up with Facebook
           </button>
@@ -154,6 +192,7 @@ export default function Login() {
               backgroundColor: 'white',
               width: '59%'
             }}
+            onClick={handleGoogleSignIn}
           ><FcGoogle style={{margin: '0 4px 3px 0'}}/>
             Sign up with Google
           </button>
