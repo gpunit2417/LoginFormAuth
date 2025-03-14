@@ -26,21 +26,21 @@ export default function SignUp() {
       alert(`Signed in as ${result.user.displayName}`);
 
       // Send user data to backend
-    await fetch("http://localhost:4000/auth/google", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: result.user.displayName,
-        email: result.user.email,
-        profilePic: result.user.photoURL,
-      }),
-    });
+      await fetch("http://localhost:4000/auth/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: result.user.displayName,
+          email: result.user.email,
+          profilePic: result.user.photoURL,
+        }),
+      });
     } catch (error) {
       console.error("Google Sign In Error", error);
       alert("Google Sign In failed");
     }
   };
- 
+
   // Facebook Sign In
   const handleFacebookSignIn = async () => {
     try {
@@ -49,15 +49,15 @@ export default function SignUp() {
       alert(`Signed in as ${result.user.displayName}`);
 
       // Send user data to backend
-    await fetch("http://localhost:4000/auth/facebook", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: result.user.displayName,
-        email: result.user.email,
-        profilePic: result.user.photoURL,
-      }),
-    });
+      await fetch("http://localhost:4000/auth/facebook", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: result.user.displayName,
+          email: result.user.email,
+          profilePic: result.user.photoURL,
+        }),
+      });
     } catch (error) {
       console.error("Facebook Sign In Error", error);
       alert("Facebook Sign In failed");
@@ -124,7 +124,7 @@ export default function SignUp() {
       }}
     >
       <div className="card" style={{ width: "40%", margin: "15px 0 15px 15px" }}>
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFgPbj-Rd2mpL3LGAqZfaiXAy0jOMtXN9gIw&s" alt="logo"/>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFgPbj-Rd2mpL3LGAqZfaiXAy0jOMtXN9gIw&s" alt="logo" />
       </div>
       <div
         style={{
@@ -365,9 +365,9 @@ export default function SignUp() {
         </form>
         <div style={{ display: "inline" }}>
           <p style={{ margin: "0 10px 0 10px" }}>Already have an account?
-          <a style={{ color: "#8860d0" }} href="/login">
-            Login
-          </a></p>
+            <a style={{ color: "#8860d0" }} href="/login">
+              Login
+            </a></p>
         </div>
         <div
           style={{
